@@ -20,7 +20,7 @@ export class LoginComponent {
   http= inject(HttpClient);
 
   onLogin(){
-    debugger
+    
     this.http.post("https://projectapi.gerasim.in/api/EmployeeManagement/login", this.loginObj).subscribe((res :any) => {
       if(res.result) {
         debugger

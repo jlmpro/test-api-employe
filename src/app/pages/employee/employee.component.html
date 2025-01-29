@@ -21,11 +21,11 @@
         <div class="col-3">
 
           <mat-form-field>
-            <mat-label>Favorite Food</mat-label>
-            <mat-select>
-              <mat-option></mat-option>
-              @for (option of foods; track option) {
-              <mat-option [value]="option.value">{{ option.viewValue }}</mat-option>
+            <mat-label>Parent department</mat-label>
+            <mat-select [(ngModel)]="deptId" name="deptId" (selectionChange)="onDeptChange()">
+              <mat-option selected>Select department</mat-option>
+              @for (dep of listParentsDept; track dep.departmentId) {
+              <mat-option [value]="dep.departmentId" >{{ dep.departmentName }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -47,12 +47,12 @@
         </div>
         <div class="col-3">
           <mat-form-field>
-            <mat-label>Select an option</mat-label>
-            <mat-select [(ngModel)]="foods" name="myfood">
-              <mat-option>None</mat-option>
-              <mat-option value="option1">Option 1</mat-option>
-              <mat-option value="option2">Option 2</mat-option>
-              <mat-option value="option3">Option 3</mat-option>
+            <mat-label>Chil Depart.</mat-label>
+            <mat-select>
+              <mat-option selected>Select department</mat-option>
+              @for (dep of listChildsDept; track dep.childDeptId) {
+              <mat-option [value]="dep.childDeptId">{{ dep.departmentName}}</mat-option>
+              }
             </mat-select>
           </mat-form-field>
 
@@ -117,36 +117,3 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 </div>
-
-<div class="mb-3">
-  <select [(ngModel)]="selected" class="form-select" name="cltfrs" id="floatingSelect">
-    <option selected>Selectionner une nourriture</option>
-    @for (obj of foods; track obj){
-    <option>
-      {{ obj.value }}
-    </option>
-    }
-
-  </select>
-</div>
-
-<!--
- <div class="mb-3">
-            <select
-              [(ngModel)]="selectedClientFournusseur"
-              class="form-select"
-              name="cltfrs"
-              id="floatingSelect"
-              (change)="onClientChange()"
-            >
-              <option selected>Selectionner un {{ origin }}</option>
-              <option
-                *ngFor="let obj of listeClientFournisseur"
-                [ngValue]="obj"
-                [selected]="obj.id === cmdClt.client?.id"
-              >
-                {{ obj?.nom }}&nbsp; {{ obj?.prenom }}
-              </option>
-            </select>
-          </div>
--->

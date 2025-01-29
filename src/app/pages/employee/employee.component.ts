@@ -1,5 +1,5 @@
 import { DataSource } from '@angular/cdk/collections';
-import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { OnInit, ViewChild } from '@angular/core';
 import {  MatSortModule, MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MasterService } from '../../services/master.service';
 
 @Component({
   selector: 'app-employee',
@@ -25,8 +26,35 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './employee.component.css',
 })
 export class EmployeeComponent implements OnInit, AfterViewInit  {
+  deptId : number = 0;
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getParentsDeptList();
+  }
+
+  getParentsDeptList(){
+    this.masterService.getParentsDept().subscribe((res: ApiResponse) => {
+      this.listParentsDept = res.data
+    })
+  }
+ /*  getAllChildsDeptList(){
+    this.masterService.getAllChildsDept().subscribe((res: ApiResponse) => {
+      this.listChildsDept= res.data;
+    })
+  } */
+
+    getChildDepartmentByParentId(){
+
+    }
+
+  onDeptChange(){
+    debugger
+    this.masterService.getChildsDeptByParentId(this.deptId).subscribe((res: ApiResponse) => {
+      debugger
+      this.listChildsDept = res.data;
+      console.log(this.deptId)
+      console.log(res.data)
+    });
   }
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -42,6 +70,11 @@ export class EmployeeComponent implements OnInit, AfterViewInit  {
     selected = '';
     selected1 = '';
     selectedFood = this.foods[2].value;
+
+    masterService = inject(MasterService);
+
+    listParentsDept : IParentDept[] = [];
+    listChildsDept : IChildDept[] = [];
 
 
 
@@ -180,4 +213,25 @@ export interface PeriodicElement {
 interface Food {
   value: string;
   viewValue: string;
+}
+
+export interface IParentDept{
+  
+    departmentId: number;
+    departmentName: string,
+    departmentLogo: string
+  
+}
+export interface IChildDept{
+  
+    childDeptId: number;
+    parentDeptId: number,
+    departmentName: string
+  
+}
+
+export interface ApiResponse{
+  message: string;
+  result: boolean;
+  data: any;
 }
